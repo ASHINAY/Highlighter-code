@@ -1,23 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import beautify from 'js-beautify';
 
-function App() {
+const App = () => {
+  const [codeEnteredbyUser, setCodeEnteredbyUser] = useState("");
+  const [codeToShow, setCodeToShow] = useState("");
+
+
+  const onChangearea = (e) => {
+    setCodeEnteredbyUser(e.target.value);
+  }
+  const submitbtn = () => {
+    setCodeToShow((codeEnteredbyUser));
+  }
+  const clearbtn = () => {
+    setCodeEnteredbyUser("");
+    setCodeToShow("");
+  }
+
+  const onCopyBtnClick = () => {
+    
+    var textField = document.createElement('textarea')
+    textField.innerText = codeToShow
+    document.body.appendChild(textField)
+    textField.select()
+    document.execCommand('copy')
+    textField.remove()
+
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Code Syntax Highlighting App</h1>
+      <div>
+        <textarea style={{ height: "35vh", width: "1250px", marginLeft: "10px" }} value={codeEnteredbyUser} onChange={(e) => { onChangearea(e) }} placeholder="Paste the code here"></textarea>
+      </div>
+      <button onClick={submitbtn}>Submit</button>
+      <button onClick={clearbtn}>Clear</button>
+      <div style={{ display: "flex",justifyContent:"flex-end" }} >
+        <SyntaxHighlighter language="javascript" style={docco}>
+          {codeToShow}
+        </SyntaxHighlighter>
+        <button style={{ height: "25px" }} onClick={onCopyBtnClick}>copy</button>
+      </div>
     </div>
   );
 }
