@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import beautify from 'js-beautify';
+import prettier from "prettier/standalone";
+import babelParser from "prettier/parser-babel";
 
 const App = () => {
   const [codeEnteredbyUser, setCodeEnteredbyUser] = useState("");
@@ -12,20 +13,24 @@ const App = () => {
     setCodeEnteredbyUser(e.target.value);
   }
   const submitbtn = () => {
-    setCodeToShow((codeEnteredbyUser));
-  }
+    const formattedCode = prettier.format(codeEnteredbyUser, {
+      parser: "babel",
+      plugins: [babelParser]
+    });
+    setCodeToShow(formattedCode);
+  };
   const clearbtn = () => {
     setCodeEnteredbyUser("");
     setCodeToShow("");
   }
 
   const onCopyBtnClick = () => {
-    
+
     var textField = document.createElement('textarea')
     textField.innerText = codeToShow
     document.body.appendChild(textField)
     textField.select()
-    document.execCommand('copy')
+    document.execCommand('copy');
     textField.remove()
 
   };
@@ -33,11 +38,13 @@ const App = () => {
     <div>
       <h1>Code Syntax Highlighting App</h1>
       <div>
-        <textarea style={{ height: "35vh", width: "1250px", marginLeft: "10px" }} value={codeEnteredbyUser} onChange={(e) => { onChangearea(e) }} placeholder="Paste the code here"></textarea>
+        <textarea style={{ height: "35vh", width: "1250px", marginLeft: "10px" }}
+          value={codeEnteredbyUser} onChange={(e) => { onChangearea(e) }}
+          placeholder="Paste the code here"></textarea>
       </div>
       <button onClick={submitbtn}>Submit</button>
       <button onClick={clearbtn}>Clear</button>
-      <div style={{ display: "flex",justifyContent:"flex-end" }} >
+      <div style={{ display: "flex", justifyContent: "flex-end" }} >
         <SyntaxHighlighter language="javascript" style={docco}>
           {codeToShow}
         </SyntaxHighlighter>
