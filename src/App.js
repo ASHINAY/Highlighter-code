@@ -31,7 +31,7 @@ const App = () => {
   };
   return (
     <div>
-      <h1>Code Syntax Highlighting App</h1>
+      <h1>Code Syntax Highlighter </h1>
       <div>
         <textarea style={{ height: "35vh", width: "1250px", marginLeft: "10px" }} value={codeEnteredbyUser} onChange={(e) => { onChangearea(e) }} placeholder="Paste the code here"></textarea>
       </div>
